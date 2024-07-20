@@ -14,7 +14,7 @@ namespace Stock.API.Consumers
             List<bool> stockResults = new();
             var stockCollection = mongoDbService.GetCollection<Models.Stock>();
             foreach (var orderItem in context.Message.OrderItems)
-                stockResults.Add(await (await stockCollection.FindAsync(s => s.ProductId == orderItem.ProductId && s.Count >= orderItem.Count)).AnyAsync());
+                stockResults.Add(await (await stockCollection.FindAsync(s => s.ProductId == orderItem.ProductId && s.Count >= (long)orderItem.Count)).AnyAsync());
 
             var sendEndpoint = await sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{RabbitMQSettings.StateMachineQueue}"));
 
